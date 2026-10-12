@@ -1,0 +1,45 @@
+{
+  "observedAt": "2026-10-08",
+  "paper": "26.3-141-54024d3",
+  "java": "Temurin 25.0.4.1",
+  "systemd": "259.5",
+  "manager": "user",
+  "managerState": "degraded by a pre-existing unrelated failed service; user manager remained operational",
+  "unitShape": {
+    "execStart": "/bin/sh ./start.sh",
+    "killMode": "control-group",
+    "restart": "no",
+    "retention": "transient unit held loaded by a unique active user-manager anchor dependency"
+  },
+  "bind": "127.0.0.1 only",
+  "gamePort": 25500,
+  "rconPort": 25501,
+  "command": "RCON restart",
+  "detachedStage": "systemd-run --user; eight one-second ticks before starting Paper",
+  "summary": {
+    "trials": 10,
+    "handoffsPassed": 10,
+    "jvmAliveAtStage1": 10,
+    "eightTicksCompleted": 10,
+    "oldInvocationInactiveSuccess": 10,
+    "newInvocationReady": 10,
+    "stage1DelayMs": {
+      "min": 327,
+      "median": 836.5,
+      "max": 6450
+    }
+  },
+  "trials": [
+    { "trial": 1, "stage1DelayMs": 327, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 2, "stage1DelayMs": 744, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 3, "stage1DelayMs": 994, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 4, "stage1DelayMs": 483, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 5, "stage1DelayMs": 1553, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 6, "stage1DelayMs": 1209, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 7, "stage1DelayMs": 929, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 8, "stage1DelayMs": 6450, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 9, "stage1DelayMs": 438, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true },
+    { "trial": 10, "stage1DelayMs": 503, "jvmAliveAtStage1": true, "detachedTicks": 8, "oldInvocation": "inactive/dead, success, exited/0", "newInvocationReady": true }
+  ],
+  "productionMarkerAcknowledgementStage": "not exercised in this capture"
+}

@@ -1,0 +1,3 @@
+[12:34:56] [Server thread/INFO]: PlayerOne has made the advancement [Example Advancement]
+[12:34:56] [Server thread/INFO]: PlayerOne has reached the goal [Example Advancement]
+[12:34:56] [Server thread/INFO]: PlayerOne has completed the challenge [Example Advancement]

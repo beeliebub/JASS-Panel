@@ -1,0 +1,4 @@
+interface:
+  display_name: "JASS Panel TypeScript Standards"
+  short_description: "TypeScript, Zod, error handling, async, and module conventions for JASS Panel."
+  default_prompt: "Use this skill when writing or reviewing TypeScript in JASS Panel."

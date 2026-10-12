@@ -1,0 +1,15 @@
+LoadState=loaded
+ActiveState=failed
+SubState=failed
+Result=signal
+ExecMainCode=2
+ExecMainStatus=9
+InvocationID=44444444444444444444444444444444
+NRestarts=0
+Restart=no
+RestartUSec=100ms
+SuccessExitStatus=143
+TimeoutStopUSec=45s
+KillMode=control-group
+Type=simple
+UnitFileState=enabled-runtime

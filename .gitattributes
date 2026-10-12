@@ -1,0 +1,10 @@
+# Files that Linux reads directly must stay LF whatever the checkout machine does: a CRLF in a shebang line fails with
+# "bad interpreter: /bin/bash^M", and a CR inside a unit file becomes part of a value.
+*.sh        text eol=lf
+*.service   text eol=lf
+*.socket    text eol=lf
+*.caddy     text eol=lf
+*.sql       text eol=lf
+
+# Fixtures are captured bytes: never rewrite their line endings.
+test/fixtures/** -text

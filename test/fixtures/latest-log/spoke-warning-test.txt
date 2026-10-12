@@ -1,0 +1,30 @@
+[00:00:04] [JASS-Connector-spoke/WARN]: [JASS-Connector] Could not connect to Connector hub at 127.0.0.1:29091
+java.net.ConnectException: Connection refused (connect failed)
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[?:?]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:639) ~[?:?]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:543) ~[?:?]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:594) ~[?:?]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284) ~[?:?]
+	at java.base/java.net.Socket.connect(Socket.java:659) ~[?:?]
+	at jass-connector-1.017.jar//me.example.jass.connector.net.ConnectorLink.connectLoop(ConnectorLink.java:190) ~[?:?]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[?:?]
+[00:17:41] [Server thread/INFO]: The Blood Moon has risen. Quality enchantments favor the bold tonight.
+[00:26:51] [Server thread/INFO]: The Blood Moon fades.
+[01:00:04] [Server thread/INFO]:  PlayerOne left
+[01:00:07] [Server thread/INFO]:  PlayerOne joined
+[01:00:34] [Server thread/INFO]:  PlayerOne left
+[01:00:36] [Server thread/INFO]:  PlayerOne joined
+[03:00:04] [Server thread/INFO]:  PlayerOne left
+[03:03:29] [Server thread/INFO]:  PlayerOne joined
+[05:00:04] [Server thread/INFO]:  PlayerOne left
+[05:00:07] [Server thread/INFO]:  PlayerOne joined
+[05:00:35] [Server thread/INFO]:  PlayerOne left
+[05:00:37] [Server thread/INFO]:  PlayerOne joined
+[06:19:41] [Server thread/INFO]:  PlayerOne left
+[08:17:41] [Server thread/INFO]: The Blood Moon has risen. Quality enchantments favor the bold tonight.
+[08:26:51] [Server thread/INFO]: The Blood Moon fades.
+[08:28:10] [Server thread/INFO]: ScannerOne (/203.0.113.11:58222) lost connection: Disconnected
+[13:33:08] [Server thread/INFO]: ScannerTwo (/203.0.113.12:39418) lost connection: Disconnected
+[14:47:57] [Server thread/INFO]:  PlayerThree joined
+[14:48:03] [Server thread/INFO]:  PlayerThree left
+[16:47:36] [Server thread/INFO]:  PlayerOne joined

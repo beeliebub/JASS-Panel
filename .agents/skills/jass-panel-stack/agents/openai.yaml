@@ -1,0 +1,4 @@
+interface:
+  display_name: "JASS Panel Stack"
+  short_description: "Architecture, invariants and layout for the JASS Panel daemon and UI."
+  default_prompt: "Use this skill when designing, implementing or reviewing anything in JASS Panel."

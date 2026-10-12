@@ -1,0 +1,69 @@
+[08:59:31] [Server thread/INFO]: [Lottery] Not enough entries to draw
+[09:00:01] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[09:00:01] [RCON Client /127.0.0.1 #13/INFO]: Thread RCON Client /127.0.0.1 shutting down
+[09:00:04] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[09:00:04] [RCON Client /127.0.0.1 #14/INFO]: Thread RCON Client /127.0.0.1 shutting down
+[09:00:04] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[09:00:04] [RCON Client /127.0.0.1 #15/INFO]: Thread RCON Client /127.0.0.1 shutting down
+[09:00:04] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[09:00:04] [RCON Client /127.0.0.1 #16/INFO]: Thread RCON Client /127.0.0.1 shutting down
+[09:00:10] [Server thread/INFO]: Stopping server
+[09:00:10] [Server thread/INFO]: [JASS-Main] Disabling JASS-Main v1.017
+[09:00:10] [Server thread/INFO]: [JASS-Connector] Disabling JASS-Connector v1.017
+[09:00:10] [Server thread/INFO]: [JASS-Connector] Connector closed
+[09:00:10] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v7.4.6-beta-01+969aa1cfa
+[09:00:10] [Server thread/INFO]: Unregistering com.sk89q.worldedit.bukkit.BukkitServerInterface from WorldEdit
+[09:00:10] [Server thread/INFO]: [JASS-Discord] Disabling JASS-Discord v1.017
+[09:00:10] [Server thread/INFO]: [DiscordSRV] API listener me.example.jass.discord.DiscordReadyListener unsubscribed
+[09:00:10] [Server thread/INFO]: [JASS-Protection] Disabling JASS-Protection v1.017
+[09:00:10] [Server thread/INFO]: [DiscordSRV] Disabling DiscordSRV v1.30.6
+[09:00:10] [DiscordSRV - Shutdown/INFO]: [DiscordSRV] Shutdown completed in 46ms
+[09:00:10] [Server thread/INFO]: [JASS-Core] Disabling JASS-Core v1.017
+[09:00:10] [Server thread/INFO]: Saving players
+[09:00:10] [Server thread/INFO]: Saving worlds
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:overworld'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:overworld'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:overworld'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 5 block chunks, 15 entity chunks, 0 poi chunks in world 'minecraft:overworld' in 0.02s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:overworld'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:overworld'
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:the_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:the_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:the_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'minecraft:the_nether' in 0.00s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:the_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:the_nether'
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'minecraft:the_end'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'minecraft:the_end'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'minecraft:the_end'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'minecraft:the_end' in 0.00s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'minecraft:the_end'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'minecraft:the_end'
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:resource_nether
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'jass:resource_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'jass:resource_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'jass:resource_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'jass:resource_nether' in 0.00s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'jass:resource_nether'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'jass:resource_nether'
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:resource
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'jass:resource'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'jass:resource'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'jass:resource'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'jass:resource' in 0.00s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'jass:resource'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'jass:resource'
+[09:00:10] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:pi
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'jass:pi'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'jass:pi'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'jass:pi'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Saved 0 block chunks, 0 entity chunks, 0 poi chunks in world 'jass:pi' in 0.00s
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk I/O to halt for world 'jass:pi'
+[09:00:10] [Server thread/INFO]: [ChunkHolderManager] Halted I/O scheduler for world 'jass:pi'
+[09:00:10] [Server thread/INFO]: Waiting for all RegionFile I/O tasks to complete...
+[09:00:10] [Server thread/INFO]: All RegionFile I/O tasks to complete
+[09:00:10] [Server thread/INFO]: [MoonriseCommon] Awaiting termination of worker pool for up to 60s...
+[09:00:10] [Server thread/INFO]: [MoonriseCommon] Awaiting termination of I/O pool for up to 60s...

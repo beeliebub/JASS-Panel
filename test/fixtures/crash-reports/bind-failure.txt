@@ -1,0 +1,33 @@
+---- Minecraft Crash Report ----
+// I'm sorry, Dave.
+
+Time: 2026-09-10 17:46:04
+Description: Exception in server tick loop
+
+java.lang.IllegalStateException: Failed to bind to port
+	at net.minecraft.server.dedicated.DedicatedServer.initServer(DedicatedServer.java:292)
+	at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:1266)
+	at net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:303)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: io.netty.channel.unix.Errors$NativeIoException: bind(..) failed with error(-98): Address already in use
+	Suppressed: java.util.concurrent.CompletionException: Rethrowing promise failure cause
+		at io.netty.util.concurrent.DefaultPromise.rethrowIfFailed(DefaultPromise.java:686)
+		at io.netty.util.concurrent.DefaultPromise.syncUninterruptibly(DefaultPromise.java:427)
+		at io.netty.channel.DefaultChannelPromise.syncUninterruptibly(DefaultChannelPromise.java:125)
+		at io.netty.channel.DefaultChannelPromise.syncUninterruptibly(DefaultChannelPromise.java:30)
+		at net.minecraft.server.network.ServerConnectionListener.startTcpServerListener(ServerConnectionListener.java:154)
+		at net.minecraft.server.dedicated.DedicatedServer.initServer(DedicatedServer.java:287)
+		at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:1266)
+		at net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:303)
+		at java.base/java.lang.Thread.run(Thread.java:1474)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 26.2
+	Java Version: 25.0.4, Eclipse Adoptium
+	Memory: 7915511848 bytes (7548 MiB) / 8589934592 bytes (8192 MiB) up to 8589934592 bytes (8192 MiB)
+	Memory (heap): init: 8192MiB, used: 639MiB, committed: 8192MiB, max: 8192MiB

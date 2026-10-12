@@ -1,0 +1,15 @@
+LoadState=loaded
+ActiveState=inactive
+SubState=dead
+Result=success
+ExecMainCode=1
+ExecMainStatus=143
+InvocationID=22222222222222222222222222222222
+NRestarts=0
+Restart=no
+RestartUSec=100ms
+SuccessExitStatus=143
+TimeoutStopUSec=45s
+KillMode=control-group
+Type=simple
+UnitFileState=enabled-runtime

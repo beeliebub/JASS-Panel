@@ -1,0 +1,55 @@
+# dependencies
+/node_modules
+
+# build output: `npm run build` regenerates both
+/dist
+/web/dist
+
+# local state and secrets: never committed
+# The installer writes the real environment file to ~/.config/jass-panel/panel.env.
+# Unanchored, so a stray web/.env.local is covered too (Vite reads env files from web/).
+.env
+.env.*
+!.env.example
+# Development data, if PANEL_DATA_DIR is pointed into the repository.
+/.dev-data/
+# The database holds secrets (GitHub tokens, the Discord webhook), and so do its copies, which end in .db.
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+# Server backup archives: each holds a whole server folder (world, player data, server.properties).
+*.tar.zst
+*.tar.gz
+# Keys and certificates.
+*.pem
+*.key
+*.p12
+*.pfx
+# Logs, including the per-server event logs under PANEL_DATA_DIR.
+*.log
+
+# test, type-check and coverage output
+/coverage/
+*.tsbuildinfo
+
+# .claude/: personal settings, runtime locks and worktree checkouts
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+/.claude/worktrees/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+# VS Code: keep the shared settings and recommendations tracked, ignore the rest
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.swp
+*.swo
+*~

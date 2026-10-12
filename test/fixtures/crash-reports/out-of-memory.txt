@@ -1,0 +1,18 @@
+---- Minecraft Crash Report ----
+// Daisy, daisy...
+
+Time: 2026-09-12 00:14:55
+Description: Exception in server tick loop
+
+java.lang.OutOfMemoryError: Java heap space
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 26.2
+	Java Version: 25.0.4, Eclipse Adoptium
+	Memory: 15260496 bytes (14 MiB) / 6442450944 bytes (6144 MiB) up to 6442450944 bytes (6144 MiB)
+	Memory (heap): init: 6144MiB, used: 6129MiB, committed: 6144MiB, max: 6144MiB

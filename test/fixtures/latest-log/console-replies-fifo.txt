@@ -1,0 +1,7 @@
+[23:59:26] [Server thread/INFO]: System chat: There are 0 of a max of 2 players online: 
+[23:59:28] [Server thread/INFO]: [Not Secure] [Server] hello from the fifo
+[23:59:30] [Server thread/INFO]: System chat: Saving the game (this may take a moment!)
+[23:59:30] [Server thread/INFO]: System chat: Saved the game
+[23:59:32] [Server thread/INFO]: System chat: Automatic saving is now disabled
+[23:59:34] [Server thread/INFO]: System chat: Automatic saving is now enabled
+[23:59:36] [Server thread/INFO]: TPS from last 1m, 5m, 15m: 20.0, 20.0, 20.0

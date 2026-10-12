@@ -1,0 +1,7 @@
+# The environment systemd gives ExecStopPost= (SERVICE_RESULT, EXIT_CODE, EXIT_STATUS), one line per way a Paper build 141
+# unit ended, in a user manager (systemd 259.5). Unit shape: Type=simple, JVM as the main process, Restart=on-failure,
+# SuccessExitStatus=143. Lines are "<way it ended> result=<SERVICE_RESULT> code=<EXIT_CODE> status=<EXIT_STATUS>".
+panel-stop result=success code=exited status=143
+ingame-stop result=success code=exited status=0
+crash-sigkill result=signal code=killed status=KILL
+ingame-restart result=success code=exited status=0

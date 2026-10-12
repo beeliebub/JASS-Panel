@@ -1,0 +1,2 @@
+[12:34:56] [Server thread/ERROR]: Encountered an unexpected exception
+[12:34:56] [Server thread/ERROR]: This crash report has been saved to: [redacted]

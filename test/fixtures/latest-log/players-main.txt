@@ -1,0 +1,28 @@
+[17:00:34] [Server thread/INFO]:  PlayerOne left
+[17:00:35] [User Authenticator #0/INFO]: UUID of player PlayerOne is 00000000-0000-4000-8000-000000000001
+[17:00:35] [Server thread/INFO]: [HorriblePlayerLoginEventHack] You have plugins listening to the PlayerLoginEvent, this will cause re-configuration APIs to be unavailable: [JASS-Core, DiscordSRV]
+[17:00:37] [Server thread/INFO]: System chat: PlayerOne joined the game
+[17:00:37] [Server thread/INFO]: PlayerOne[/203.0.113.10:62517] logged in with entity id 319 at ([minecraft:overworld]100.5, 64.0, -200.5)
+[17:01:00] [Server thread/INFO]: [JASS-Discord] Discord announcements are configured for #announcements (100000000000000003).
+[17:03:35] [Server thread/INFO]: PlayerOne issued server command: /back
+---
+[15:00:04] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[15:00:04] [Server thread/INFO]: System chat: [PlayerOne: Transferring PlayerOne to justasimpleserver.net:25563]
+[15:00:04] [Server thread/INFO]: System chat: [PlayerTwo: Transferring PlayerTwo to justasimpleserver.net:25563]
+[15:00:04] [RCON Client /127.0.0.1 #16/INFO]: Thread RCON Client /127.0.0.1 shutting down
+[15:00:04] [Server thread/INFO]: PlayerOne lost connection: Disconnected
+[15:00:04] [Server thread/INFO]: System chat: PlayerOne left the game
+[15:00:04] [Server thread/INFO]: PlayerTwo lost connection: Disconnected
+[15:00:04] [Server thread/INFO]: System chat: PlayerTwo left the game
+[15:00:07] [Server thread/INFO]:  PlayerOne joined
+[15:00:08] [Server thread/INFO]:  PlayerTwo joined
+---
+[15:08:18] [Server thread/INFO]: System chat: PlayerTwo left the game
+[15:08:22] [Server thread/INFO]:  PlayerTwo joined
+[15:08:36] [Server thread/INFO]:  PlayerTwo: hello from the other server
+[15:12:37] [Server thread/INFO]: PlayerOne issued server command: /back
+[15:12:52] [Server thread/INFO]: PlayerOne issued server command: /back
+[15:13:05] [Async Chat Thread - #2/INFO]: <PlayerOne> that looks good
+[15:13:08] [Async Chat Thread - #2/INFO]: <PlayerOne> well done
+[15:13:19] [Server thread/INFO]: PlayerOne issued server command: /back
+[15:13:24] [Server thread/INFO]: PlayerOne issued server command: /back

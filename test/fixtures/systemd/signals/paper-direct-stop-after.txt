@@ -1,0 +1,17 @@
+LoadState=loaded
+ActiveState=failed
+SubState=failed
+InactiveEnterTimestampMonotonic=214980478490
+InvocationID=2064d6eb0a1d45b28c5dda08c11d9f73
+Type=simple
+Restart=no
+RestartUSec=100ms
+TimeoutStopUSec=1min
+SuccessExitStatus=
+MainPID=0
+Result=exit-code
+NRestarts=0
+ExecMainExitTimestamp=Thu 2026-10-08 08:29:30 CDT
+ExecMainCode=1
+ExecMainStatus=143
+KillMode=control-group

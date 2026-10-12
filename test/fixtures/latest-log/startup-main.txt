@@ -1,0 +1,84 @@
+[17:00:13] [ServerMain/INFO]: [bootstrap] Running Java 25 (OpenJDK 64-Bit Server VM 25.0.4+7-LTS; Eclipse Adoptium Temurin-25.0.4+7) on Linux 6.x.y-generic (amd64)
+[17:00:13] [ServerMain/INFO]: [bootstrap] Loading Paper 26.3-141-main@54024d3 (2026-10-01T15:55:33Z) for Minecraft 26.3
+[17:00:13] [ServerMain/INFO]: [PluginInitializerManager] Initializing plugins...
+[17:00:14] [ServerMain/INFO]: [PluginInitializerManager] Initialized 7 plugins
+[17:00:14] [ServerMain/INFO]: [PluginInitializerManager] Bukkit plugins (7):
+ - DiscordSRV (1.30.6), JASS-Connector (1.017), JASS-Core (1.017), JASS-Discord (1.017), JASS-Main (1.017), JASS-Protection (1.017), WorldEdit (7.4.6-beta-01+969aa1cfa)
+[17:00:19] [DataConverter MCTypeRegistry init thread/INFO]: [ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry] Initialising converters for DataConverter...
+[17:00:19] [ServerMain/INFO]: [com.destroystokyo.paper.profile.PaperServicesDiscoveryService] Environment: Environment[discoveryUrl=https://discovery.minecraftservices.com/minecraft/client, name=PROD]
+[17:00:19] [DataConverter MCTypeRegistry init thread/INFO]: [ca.spottedleaf.dataconverter.minecraft.datatypes.MCTypeRegistry] Finished initialising converters for DataConverter in 607.2ms
+[17:00:22] [Worker-Main-1/WARN]: Found loot table element validation problem in {minecraft:entities/elder_guardian@minecraft:loot_table}.pools[3].entries[0].value[0]->{minecraft:gameplay/fishing/fish@minecraft:loot_table}.pools[0].entries[0]: Unreachable entry!
+[17:00:22] [Worker-Main-1/WARN]: Found loot table element validation problem in {minecraft:entities/guardian@minecraft:loot_table}.pools[2].entries[0].value[0]->{minecraft:gameplay/fishing/fish@minecraft:loot_table}.pools[0].entries[0]: Unreachable entry!
+[17:00:22] [Worker-Main-1/WARN]: Found loot table element validation problem in {minecraft:gameplay/fishing@minecraft:loot_table}.pools[0].entries[2].value[0]->{minecraft:gameplay/fishing/fish@minecraft:loot_table}.pools[0].entries[0]: Unreachable entry!
+[17:00:22] [Worker-Main-1/WARN]: Found loot table element validation problem in {minecraft:gameplay/fishing/fish@minecraft:loot_table}.pools[0].entries[0]: Unreachable entry!
+[17:00:22] [Worker-Main-1/ERROR]: Couldn't load advancements: [jass:recipes/ingot_from_anvil, jass:recipes/tweaks_repair_kit]
+[17:00:22] [Worker-Main-1/INFO]: Loaded 1869 advancements
+[17:00:22] [ServerMain/ERROR]: Failed to load function dqc.dice:try_clean
+java.util.concurrent.CompletionException: java.lang.IllegalArgumentException: Whilst parsing command on line 4: Failed to parse structure: Failed to parse either. First: No key type in MapLike[{components:{"!minecraft:dyed_color":{}},function:"set_components"}]; Second: Failed to parse either. First: Not a string; Second: Failed to parse either. First: Not a list: {components:{"!minecraft:dyed_color":{}},function:"set_components"}; Second: No key type in MapLike[{components:{"!minecraft:dyed_color":{}},function:"set_components"}] at position 156: ...olor":{}}}<--[HERE]
+	at java.base/java.util.concurrent.CompletableFuture.wrapInCompletionException(CompletableFuture.java:323) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:359) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:364) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1791) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.lambda$prepareTasks$1(SimpleReloadInstance.java:68) ~[paper-26.3.jar:26.3-141-54024d3]
+	at java.base/java.util.concurrent.ForkJoinTask$RunnableExecuteAction.compute(ForkJoinTask.java:1753) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask$RunnableExecuteAction.compute(ForkJoinTask.java:1745) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask$InterruptibleTask.exec(ForkJoinTask.java:1662) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:511) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1450) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:2019) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:187) ~[?:?]
+Caused by: java.lang.IllegalArgumentException: Whilst parsing command on line 4: Failed to parse structure: Failed to parse either. First: No key type in MapLike[{components:{"!minecraft:dyed_color":{}},function:"set_components"}]; Second: Failed to parse either. First: Not a string; Second: Failed to parse either. First: Not a list: {components:{"!minecraft:dyed_color":{}},function:"set_components"}; Second: No key type in MapLike[{components:{"!minecraft:dyed_color":{}},function:"set_components"}] at position 156: ...olor":{}}}<--[HERE]
+	at net.minecraft.commands.functions.CommandFunction.fromLines(CommandFunction.java:86) ~[paper-26.3.jar:26.3-141-54024d3]
+	at net.minecraft.server.ServerFunctionLibrary.lambda$reload$3(ServerFunctionLibrary.java:91) ~[paper-26.3.jar:26.3-141-54024d3]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1789) ~[?:?]
+	... 8 more
+[17:00:23] [Server thread/INFO]: Starting minecraft server version 26.3
+[17:00:23] [Server thread/INFO]: Loading properties
+[17:00:23] [Server thread/INFO]: This server is running Paper version 26.3-141-main@54024d3 (2026-10-01T15:55:33Z) (Implementing API version 26.3.build.141-beta)
+[17:00:23] [Server thread/INFO]: [spark] This server bundles the spark profiler. For more information please visit https://docs.papermc.io/paper/profiling
+[17:00:23] [Server thread/INFO]: Server Ping Player Sample Count: 12
+[17:00:23] [Server thread/INFO]: Using 4 threads for Netty based IO
+[17:00:24] [Server thread/INFO]: [MoonriseCommon] Paper is using 3 worker threads, 1 I/O threads
+[17:00:24] [Server thread/INFO]: Default game type: SURVIVAL
+[17:00:24] [Server thread/INFO]: Generating keypair
+[17:00:24] [Server thread/INFO]: Starting Minecraft server on *:25565
+[17:00:24] [Server thread/INFO]: Paper: Using libdeflate (Linux x86_64) compression from Velocity.
+[17:00:24] [Server thread/INFO]: Paper: Using OpenSSL 3.x.x (Linux x86_64) cipher from Velocity.
+[17:00:25] [Server thread/INFO]: [JASS-Core] Loading server plugin JASS-Core v1.017
+[17:00:25] [Server thread/INFO]: [DiscordSRV] Loading server plugin DiscordSRV v1.30.6
+[17:00:25] [Server thread/INFO]: [JASS-Protection] Loading server plugin JASS-Protection v1.017
+[17:00:25] [Server thread/INFO]: [JASS-Discord] Loading server plugin JASS-Discord v1.017
+[17:00:25] [Server thread/INFO]: [WorldEdit] Loading server plugin WorldEdit v7.4.6-beta-01+969aa1cfa
+[17:00:25] [Server thread/INFO]: Got request to register class com.sk89q.worldedit.bukkit.BukkitServerInterface with WorldEdit [com.sk89q.worldedit.extension.platform.PlatformManager@786d97e1]
+[17:00:26] [Server thread/INFO]: [JASS-Connector] Loading server plugin JASS-Connector v1.017
+[17:00:26] [Server thread/INFO]: [JASS-Main] Loading server plugin JASS-Main v1.017
+[17:00:26] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[17:00:26] [Server thread/INFO]: [WorldEdit] Enabling WorldEdit v7.4.6-beta-01+969aa1cfa
+[17:00:26] [Server thread/INFO]: Registering commands with com.sk89q.worldedit.bukkit.BukkitServerInterface
+[17:00:26] [Server thread/INFO]: WEPIF: Using the Bukkit Permissions API.
+[17:00:26] [Server thread/INFO]: Using com.sk89q.worldedit.bukkit.adapter.impl.v26_3.PaperweightAdapter as the Bukkit adapter
+[17:00:26] [Server thread/INFO]: Preparing level "world"
+[17:00:29] [Server thread/INFO]: [JASS-Main] Loaded 84 quality enchantment variants across 21 enchantment types.
+[17:00:29] [Server thread/INFO]: [JASS-Main] JASS-Main enabled.
+[17:00:29] [DiscordSRV - Initialization/INFO]: [DiscordSRV] [JDA] Login Successful!
+[17:00:29] [Server thread/INFO]: [spark] Starting background profiler...
+[17:00:29] [JDA MainWS-ReadThread/INFO]: [DiscordSRV] [JDA] Connected to WebSocket
+[17:00:29] [Server thread/INFO]: Starting remote control listener
+[17:00:29] [Server thread/INFO]: Thread RCON Listener started
+[17:00:29] [Server thread/INFO]: RCON running on 0.0.0.0:25575
+[17:00:29] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[17:00:30] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[17:00:30] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[17:00:30] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:resource_nether
+[17:00:30] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:pi
+[17:00:30] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/jass:resource
+[17:00:30] [Server thread/INFO]: Running delayed init tasks
+[17:00:30] [Server thread/INFO]: Done (17.545s)! For help, type "help"
+[17:00:30] [Paper Async Task Handler Thread - 1/INFO]: *** Currently you are 10 builds behind ***
+[17:00:30] [Paper Async Task Handler Thread - 1/INFO]: *** It is highly recommended to download the latest build from https://papermc.io/downloads/paper ***
+[17:00:30] [JDA MainWS-ReadThread/INFO]: [DiscordSRV] [JDA] Finished Loading!
+[17:00:30] [DiscordSRV - Initialization/INFO]: [DiscordSRV] Console forwarding assigned to channel TC:console-channel(100000000000000003)
+[17:00:30] [DiscordSRV - Initialization/INFO]: [DiscordSRV] Saved linked accounts in 3ms
+[17:00:30] [DiscordSRV - JDA Callback 0/INFO]: [DiscordSRV] Cleared all pre-existing slash commands in 1/1 guilds (0 cancelled)
+[17:00:31] [RCON Listener #1/INFO]: Thread RCON Client /127.0.0.1 started
+[17:00:31] [RCON Client /127.0.0.1 #2/INFO]: Thread RCON Client /127.0.0.1 shutting down

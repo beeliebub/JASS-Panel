@@ -1,0 +1,8 @@
+[12:34:56] [Server thread/INFO]: PlayerOne was slain by a mob
+[12:34:56] [Server thread/INFO]: PlayerOne fell from a high place
+[12:34:56] [Server thread/INFO]: PlayerOne drowned while trying to escape a mob
+[12:34:56] [Server thread/INFO]: PlayerOne burned to death
+[12:34:56] [Server thread/INFO]: PlayerOne hit the ground too hard
+[12:34:56] [Server thread/INFO]: PlayerOne tried to swim in lava
+[12:34:56] [Server thread/INFO]: PlayerOne suffocated in a wall
+[12:34:56] [Server thread/INFO]: PlayerOne withered away
