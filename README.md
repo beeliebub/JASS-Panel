@@ -107,7 +107,7 @@ Do the steps in order, and do not go on until each **Expect** line matches. If a
 | Value | Local test install | Live install | Where it lives |
 |---|---|---|---|
 | `PANEL_PUBLIC_ORIGIN` | `http://127.0.0.1:8080` | `https://justasimpleserver.net` | `~/.config/jass-panel/panel.env` |
-| `AUTH_URL` (website) | `http://127.0.0.1:8080` | `https://justasimpleserver.net` | The website's environment. See its deploy document |
+| `AUTH_URL` (website) | `http://127.0.0.1:8080` | `https://justasimpleserver.net` | The website's `.env.production`. Step 3a shows how to find and check it |
 | `SITE_INTERNAL_URL` | `http://127.0.0.1:3000` | `http://127.0.0.1:3000` | `~/.config/jass-panel/panel.env` |
 | `PANEL_PORT` | `29200` | `29200` | `~/.config/jass-panel/panel.env`. The Caddy snippet must match |
 | `PANEL_BASE_PATH` | `/panel` | `/panel` | `~/.config/jass-panel/panel.env`. The Caddy snippet must match |
@@ -126,6 +126,8 @@ SITE=http://127.0.0.1:8080
 ```sh
 SITE=https://justasimpleserver.net
 ```
+
+**The local test port is an example.** This guide uses port `8080` for the local test everywhere: `SITE`, `PANEL_PUBLIC_ORIGIN`, the website's `AUTH_URL`, the Caddy site block and Repair A. If your Caddy site for the website uses another port, use that port in all of them. The port is on the first line of that site block (step 3b).
 
 **What `panel.env` must contain** after step 6.
 
@@ -157,7 +159,8 @@ Keep one `NAME=value` per line. Do not add comments or quotes.
 | `~/.config/systemd/user/jass-panel.service` | The installer, step 6 | No. Run the installer again from the checkout to change it |
 | `<checkout>/dist/server/main.js` | `npm run build`, step 5 | No |
 | `~/.local/share/jass-panel/` | The panel | No. Deleting it removes the panel's database and backups (see Uninstall) |
-| `/etc/caddy/Caddyfile` | You, following the website's deploy document; step 3 | Yes, for the refusal, the import and the website's proxy line |
+| `/etc/caddy/Caddyfile` | Provisioning, or you, step 3b. Find the path with `systemctl cat caddy --no-pager` (look for `--config`) | Yes, with `sudo`, for the refusal, the import and the website's proxy line |
+| The website's `.env.production` (holds `AUTH_URL`) | The website's deploy, or you, step 3a | Yes, for `AUTH_URL`. Step 3a shows how to find it and recreate the website |
 | `/etc/caddy/conf.d/jass-panel.caddy` | You, step 7 | No. Run step 7 again to change it |
 
 ### 1. Install the requirements
@@ -237,7 +240,29 @@ If the website has no OWNER account yet, create one on the website's machine, in
 npm run create-admin -- <email> <password> --role OWNER
 ```
 
-The panel adds no environment variable to the website and needs no database change. The website's `AUTH_URL` must equal `PANEL_PUBLIC_ORIGIN` (see Values and files).
+The panel adds no environment variable to the website and needs no database change.
+
+**The website's `AUTH_URL`** must equal the site address from step 6. It is set in the website's `.env.production`. To find the file and check the running value:
+
+1. Find the folder of the website's Docker Compose project. Run:
+
+   ```sh
+   sudo docker compose ls
+   ```
+
+   **Expect:** a line for the website's project, with its `docker-compose.yml` path under `CONFIG FILES`.
+
+2. Check the running value. Replace the path with the one from step 1:
+
+   ```sh
+   sudo docker compose -f /path/to/docker-compose.yml exec web printenv AUTH_URL
+   ```
+
+   **Expect:** the site address.
+
+   **Stop if** it is not: edit `.env.production` in the same folder as `docker-compose.yml` and set `AUTH_URL=` to the site address. Then recreate the website's container so it reads the file: `sudo docker compose -f /path/to/docker-compose.yml up -d --force-recreate web`. Run step 2 again.
+
+If the website does not run under Docker Compose, set `AUTH_URL` where the website reads it, restart the website, and check the value. On a VPS provisioned from the website's repository, provisioning already set `AUTH_URL` to `https://<domain>`, so check it rather than change it.
 
 **3b. The website's Caddyfile refuses the panel's API and imports the snippet.**
 
@@ -258,7 +283,7 @@ http://127.0.0.1:8080 {
 }
 ```
 
-**Live:** the block is `justasimpleserver.net {`. Keep everything it already has. Make sure it contains the refusal and the import below, and that its catch-all `handle` block proxies to `127.0.0.1:3000`.
+**Live:** the block is `justasimpleserver.net {`. Keep everything it already has. On a VPS provisioned from the website's repository, this file already has these lines, because provisioning installs it: check it, and do not copy them in by hand. Make sure it contains the refusal and the import below, and that its catch-all `handle` block proxies to `127.0.0.1:3000`.
 
 ```caddy
 justasimpleserver.net {
@@ -297,6 +322,16 @@ grep -n '@panel' /etc/caddy/Caddyfile
 **Expect:** only lines that contain `@panel_api`.
 
 **Stop if** another matcher is named `@panel`: rename it, because the panel's snippet defines `@panel`.
+
+**Check the website's proxy line.** The catch-all `handle` block of your site must send the website's requests to `127.0.0.1:3000`. **Run:**
+
+```sh
+grep -n 'reverse_proxy' /etc/caddy/Caddyfile
+```
+
+**Expect:** a line `reverse_proxy 127.0.0.1:3000` for the website. Other `reverse_proxy` lines may belong to other sites in the file.
+
+**Stop if** the website's line names another port, such as `127.0.0.1:4000`. Nothing answers there, so Caddy returns `502` for the website. Change the port to `3000`, then validate and reload with the command in step 7d.
 
 **3c. Caddy is valid and running.**
 
@@ -359,7 +394,11 @@ curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000/
 
 **Expect:** the same number on both lines, normally `200`.
 
-**Stop if** the numbers differ: see Troubleshooting, "502 from Caddy on the website's `/`".
+**Stop if** the first number is `000`, with `curl` exit code 7 (connection refused). Nothing listens at `SITE`, so the port in `SITE` is not the port your Caddy site uses. Take the port from the first line of your Caddy site block (step 3b), use that address for `SITE`, `PANEL_PUBLIC_ORIGIN` and the website's `AUTH_URL`, then repeat this step.
+
+**Stop if** the first number is `502`: Caddy cannot reach the website. Run the `reverse_proxy` check in step 3b, and set the website's port to `3000`.
+
+**Stop if** the numbers differ in any other way, see Troubleshooting.
 
 **Live only: ports and certificate.** **Run:**
 
@@ -510,7 +549,7 @@ journalctl --user -u jass-panel --no-pager | grep 'panel listening on loopback'
 
 #### Repair A: fix the site address
 
-Use this when the site address check fails, or the journal shows a `PANEL_PUBLIC_ORIGIN` message. The installer keeps `panel.env`, so fix the file, and do not pass a different `PANEL_PUBLIC_ORIGIN` to the installer.
+Use this when the site address check fails, or the journal shows a `PANEL_PUBLIC_ORIGIN` message. The installer keeps `panel.env`, so fix the file, and do not pass a different `PANEL_PUBLIC_ORIGIN` to the installer. The commands below use port `8080`, the example in this guide. If your Caddy site uses another port, use that port in the value.
 
 **Local test: run**
 
@@ -570,7 +609,7 @@ After either repair, check the site address, the folder, the service and the sta
 
 ### 7. Serve the panel through Caddy
 
-Both installs use the same snippet. Caddy must be active (step 3c). This step adds the panel's route and reloads Caddy.
+Both installs use the same snippet. Caddy must be active (step 3c). This step adds the panel's route and reloads Caddy. On a live VPS this is the one Caddy step that provisioning does not do: the website's deploy document says the operator writes it.
 
 **7a. Check the port and path.** **Run:**
 
@@ -1004,8 +1043,10 @@ rm -r ~/.local/share/jass-panel
 | `curl` reports `Connection refused` (exit code 7) | Nothing listens at that address and port. Compare `sudo ss -ltnp` with your site address from step 3b. |
 | **Local test:** `curl` reports `Connection refused` on `127.0.0.1:8080` | Caddy is not serving the local site. Check that the site block's first line is `http://127.0.0.1:8080 {`, that `systemctl is-active caddy` prints `active`, and that `ss -ltn` lists `127.0.0.1:8080`. |
 | **Live:** `curl` reports a certificate problem | Caddy has not obtained a certificate for `justasimpleserver.net` yet. Check that `getent hosts justasimpleserver.net` shows this server, that ports 80 and 443 reach this server, and read `sudo journalctl -u caddy -n 50 --no-pager`. |
+| `000` with `curl` exit code 7 for `SITE` | Nothing listens at `SITE`. The port in `SITE` is not the port of your Caddy site. Use the port on the first line of your Caddy site block, everywhere it appears (step 3c). |
+| Caddy journal shows `dial tcp 127.0.0.1:NNNN: connect: connection refused` | Caddy sends a request to a port where nothing listens. For the website, set the `reverse_proxy` target to `127.0.0.1:3000` (step 3b), then validate and reload. |
 | `502` from Caddy on `/panel/` | Caddy cannot reach the panel. Check that the panel is `active`, and that the snippet's port matches `PANEL_PORT`. |
-| `502` from Caddy on the website's `/` | Caddy's upstream for the website is not the port the website answers on. The website answers `200` on `http://127.0.0.1:3000/` directly. Compare the `reverse_proxy` target in your Caddyfile with the port from `ss -ltn`. |
+| `502` from Caddy on the website's `/` | Caddy's upstream for the website is not the port the website answers on. The website answers `200` on `http://127.0.0.1:3000/` directly. Set the website's `reverse_proxy` target to `127.0.0.1:3000` (step 3b), then validate and reload. |
 | The checks pass on `127.0.0.1` but fail on your public name | The name points somewhere else. `getent hosts <name>` prints the addresses it points to. They must be this machine's. |
 | After a rebuild, the panel still runs old code | The installer does not restart a running panel that did not change. Run `systemctl --user restart jass-panel`. |
 | The unit's `WorkingDirectory=` names a Trash folder or another copy | [Repair B](#repair-b-run-the-installer-from-your-checkout). The panel runs from the folder the installer was started in. |
