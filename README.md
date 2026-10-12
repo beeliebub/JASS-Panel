@@ -38,24 +38,31 @@ panel daemon ──GET  /api/panel/session    (the browser's Cookie, forwarded)�
 
 ## Requirements
 
-| Needed | Notes |
+The Install steps below put these in place. Check each one before you start.
+
+| Needed | How to check |
 |---|---|
-| Linux with systemd, and a user manager | `systemctl --user is-system-running` must answer `running` or `degraded`. Tested on systemd 259; the installer warns on anything older. |
-| Lingering for the account | Without it the panel and its servers stop at logout and do not start at boot. See Install, step 4. |
-| Node.js 22.12 or newer | `node -v`. The installer runs the `node` found on `PATH`. |
-| `tar` | backups and restores |
-| `zstd` (optional) | archives are `.tar.zst`; without it they are `.tar.gz` |
-| A Java runtime, for Paper servers | the Paper preset takes the absolute path of `java` |
-| The JASS website, on loopback | answering `/api/panel/session`, `/api/panel/accounts` and `/api/panel/identity`, on `127.0.0.1:3000` |
-| A reverse proxy in front of both | Caddy today, one origin with TLS |
+| Linux with systemd, and a user manager | `systemctl --user is-system-running` prints `running` or `degraded`. Tested on systemd 259; the installer warns on anything older (`systemctl --version` shows the version). |
+| Lingering for the account | `loginctl show-user "$USER" -p Linger` prints `Linger=yes`. Without it the panel and its servers stop at logout and do not start at boot. Install, step 4. |
+| Node.js 22.12 or newer | `node -v` prints `v22.12.0` or newer. The installer runs the `node` found on `PATH`. |
+| `tar` | `tar --version`. Used for backups and restores. |
+| `zstd` (optional) | `zstd --version`. Archives are `.tar.zst`; without `zstd` they are `.tar.gz`. |
+| A Java runtime, for Paper servers | `command -v java`. The Paper preset takes the absolute path of `java`. |
+| The JASS website, on loopback | `curl -i http://127.0.0.1:3000/api/panel/session` answers `401` with a JSON body. The panel also uses `/api/panel/accounts` and `/api/panel/identity` on the same address. Install, step 3. |
+| Caddy 2, with a `caddy.service` unit | `caddy version` prints `v2.` and a version number. `systemctl cat caddy` shows the config file the unit loads. Install, step 3. |
 
 Nothing depends on a particular account name or directory.
 
 ## Install
 
-These steps assume the website is already live behind Caddy, and that one Linux account will own the panel and the game servers. Run
-everything as that account unless a step says `sudo`. They were tested on Ubuntu 26.04 with systemd 259, Node.js 22.22, OpenJDK 25.0.4,
-Paper 26.3 build 141 and Caddy 2.11.6.
+This guide installs the panel beside a JASS website that is already running behind Caddy, for one Linux account that will own the panel
+and the game servers. Do the steps in order. Each step ends with a check, and a step is not finished until its check passes.
+
+- Run every command as that account. Where a command uses `sudo`, it asks for that account's password.
+- If the website is a copy of the live site, with real accounts in its database, do not use this guide. Use
+  [Testing against a copy of the live website](#testing-against-a-copy-of-the-live-website) instead. That copy must not sit behind Caddy.
+- The steps were tested on Ubuntu 26.04 with systemd 259, Node.js 22.22, OpenJDK 25.0.4, Paper 26.3 build 141 and Caddy 2.11.6. On other
+  versions, read each step's output before you go on.
 
 ### 1. Install the requirements
 
@@ -64,24 +71,35 @@ On Ubuntu 26.04 the archive provides everything except Caddy:
 ```sh
 sudo apt update
 sudo apt install nodejs npm tar zstd openjdk-25-jre-headless
-node -v    # must print 22.12 or newer
+node -v    # must print v22.12.0 or newer
 ```
 
-Caddy 2 comes from its own repository, because the archive's package is 2.6, older than the version the proxy rules were tested with.
-See <https://caddyserver.com/docs/install>. Java is needed only for Paper servers. `zstd` is optional: without it, backups are `.tar.gz`.
+- `zstd` is optional: without it, backups are `.tar.gz`. Java is needed only for Paper servers. On other systems, install the same tools
+  with that system's package names.
+- If `node -v` prints an older version, install Node.js 22.12 or newer another way, such as NodeSource or nvm, then check again. The
+  installer runs the `node` that comes first on `PATH`, so check it in the shell you will run the installer from.
+- Install Caddy 2 from Caddy's own repository, not the Ubuntu archive. The archive's package is 2.6, older than the 2.11.6 the rules were
+  tested with. See <https://caddyserver.com/docs/install>. Caddy's package installs the `caddy.service` unit that step 3 checks.
 
 ### 2. Get the code
 
 Clone the repository, or copy its folder, into the directory you will run the panel from. Choose the final location now. The installer
-writes the checkout's path into the systemd unit, so if you move the folder later, run `scripts/install.sh` again from its new location.
+writes the checkout's full path into the systemd unit. If you move the folder later, run `scripts/install.sh` again from its new location.
 
-### 3. Bring the website up to date first
+From the checkout's top folder, both files must be listed:
 
-The website must have the panel's routes before the panel can start. Its own deploy document (`docs/DEPLOYMENT.md` in the website repository)
-has the steps: deploy the version with the panel routes, run its migrations and its pages-only seed, check for `/panel` page collisions, and
-update Caddy as that document describes.
+```sh
+ls scripts/install.sh package.json
+```
 
-Check the website on loopback:
+### 3. Bring the website and Caddy up
+
+Before the panel is added, the website must have the panel's routes, and Caddy must be running with the website's Caddyfile. The installer
+touches neither one.
+
+**The website.** Follow the website's own deploy document (`docs/DEPLOYMENT.md` in the website repository). It covers deploying the version
+with the panel routes, running its migrations and its pages-only seed, and checking for `/panel` page collisions. Then check the website on
+loopback:
 
 ```sh
 curl -i http://127.0.0.1:3000/api/panel/session
@@ -96,23 +114,110 @@ npm run create-admin -- <email> <password> --role OWNER
 ```
 
 Run this only for an email that has no account yet. `create-admin` replaces the password and the role of an existing account; see
-[Existing website and accounts](#existing-website-and-accounts).
+[Existing website and accounts](#existing-website-and-accounts) before you run it.
 
-The panel adds no environment variable to the website and needs no database change. `AUTH_URL` must already be the public HTTPS origin, as the
-website's deploy document says; a wrong value makes the panel refuse every signed-in browser.
+The panel adds no environment variable to the website and needs no database change. `AUTH_URL` must already be the public HTTPS origin, as
+the website's deploy document says; a wrong value makes the panel refuse every signed-in browser.
 
-Existing accounts are not touched by any of this. See [Existing website and accounts](#existing-website-and-accounts) below before you run
-`create-admin` on the website.
+**The website's Caddyfile.** Inside the site block for the public website, it needs two things:
+
+1. The refusal for the panel's API paths, in a `handle` block of its own:
+
+   ```caddy
+   @panel_api path /api/panel /api/panel/*
+   handle @panel_api {
+       respond 404
+   }
+   ```
+
+2. The import that loads the panel's snippet:
+
+   ```caddy
+   import /etc/caddy/conf.d/*.caddy
+   ```
+
+Use `handle` for the refusal, not a bare `respond`. In tests with Caddy 2.11.6, a bare `respond` did not stop `/api/panel` requests from
+reaching the website's `handle` block; the `handle` form did. Step 8 checks the result, so the file check below only helps you read the file.
+
+Read the file. The grep shows the import line and the `/api/panel` matcher; the listing shows everything else:
+
+```sh
+grep -n -E 'conf.d|api/panel' /etc/caddy/Caddyfile
+cat -n /etc/caddy/Caddyfile
+```
+
+The refusal must be a `handle` block, the import must sit inside the site block, and no other matcher may be named `@panel`, because the
+panel's snippet defines one. If something is missing, update the website's Caddyfile as the website's deploy document describes.
+
+**Caddy.** The installer does not start or reload Caddy. Caddy must be running before step 7.
+
+1. Check the Caddy binary, and the config file its service loads:
+
+   ```sh
+   caddy version
+   systemctl cat caddy --no-pager
+   ```
+
+   `caddy version` prints `v2.` and a version number. The unit's `ExecStart` must run `caddy run` with `--config <file>` and
+   `--adapter caddyfile`, and its `ExecReload` must reload the same `<file>`. This guide uses `/etc/caddy/Caddyfile`. If your `<file>` is
+   different, use it in every command in this guide. If `systemctl cat caddy` reports no unit, install Caddy from its package repository,
+   which provides one.
+
+2. Validate the website's Caddyfile:
+
+   ```sh
+   sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+   ```
+
+   It must print `Valid configuration`. Until step 7 writes the snippet, Caddy also warns that the import pattern matches no files. That
+   warning is expected, and it is not an error.
+
+3. Check whether the service is enabled and running:
+
+   ```sh
+   systemctl is-enabled caddy
+   systemctl is-active caddy
+   ```
+
+   The first prints `enabled` and the second prints `active`. If the second prints `inactive` or `failed`, go on to item 4.
+
+4. Start Caddy, and enable it so that it starts at boot:
+
+   ```sh
+   sudo systemctl enable --now caddy
+   systemctl is-active caddy
+   ```
+
+   `is-active` must print `active`. If it does not, read the cause, fix it, and start again:
+
+   ```sh
+   systemctl status caddy --no-pager
+   sudo journalctl -u caddy -n 50 --no-pager
+   ```
+
+   Common causes: the Caddyfile is invalid (item 2 fails the same way); another program holds port 80 or 443, which
+   `sudo ss -ltnp | grep -E ':(80|443) '` shows; or the `--config` file in the unit does not exist.
+
+5. Check that the website answers through Caddy:
+
+   ```sh
+   curl -s -o /dev/null -w '%{http_code}\n' https://example.net/
+   ```
+
+   Replace `example.net` with your public host, and see the note in step 8 if the name does not resolve to this machine yet. The result
+   must be the website's normal answer, such as `200`. `502` means Caddy cannot reach the website on `127.0.0.1:3000`.
 
 ### 4. Turn lingering on
 
-Lingering keeps the account's user manager running after logout and starts enabled units at boot:
+Lingering keeps your user manager running after logout and starts enabled user units at boot. The panel and its servers depend on it.
 
 ```sh
 sudo loginctl enable-linger "$USER"
+loginctl show-user "$USER" -p Linger
 ```
 
-The installer offers this when it runs in a terminal. The Health screen can do the same later, asking for the account's password. Check it with `loginctl show-user "$USER" -p Linger`, which prints `Linger=yes` once it is on.
+The second command must print `Linger=yes`. The installer offers the first command when it runs in a terminal. The Health screen can run
+it later, asking for the account's password.
 
 ### 5. Build the panel
 
@@ -120,65 +225,149 @@ The installer offers this when it runs in a terminal. The Health screen can do t
 cd /path/to/JASS-Panel
 npm ci
 npm run build
+ls dist/server/main.js web/dist/index.html
 ```
 
-`npm run build` compiles the daemon to `dist/server`, with the database migrations beside it, and the web app to `web/dist`.
+`npm ci` installs the exact dependencies in `package-lock.json`. `npm run build` compiles the daemon to `dist/server`, with the database
+migrations beside it, and the web app to `web/dist`. The last command must list both files. The installer refuses to run without
+`dist/server/main.js`.
 
 ### 6. Run the installer
 
+Run it in a terminal, as the account from the earlier steps, from the checkout. Do not use `sudo`: the installer manages your own user
+units, and `systemctl --user` talks to the account that runs it. Before the first install, nothing else may listen on `127.0.0.1:29200`,
+because the panel uses that port.
+
 ```sh
+cd /path/to/JASS-Panel
 PANEL_PUBLIC_ORIGIN=https://example.net scripts/install.sh
 ```
 
-Use the website's public origin, with no path. The installer:
+`PANEL_PUBLIC_ORIGIN` is the address people type into their browser to reach the website: the origin only, with no path. The installer
+removes a trailing slash. It must match the website's `AUTH_URL`.
 
-- checks `tar`, `systemctl` and `loginctl`, Node.js 22.12 or newer, that the daemon is built, that the user manager is running, and that
-  lingering is on;
-- writes `~/.config/jass-panel/panel.env` with mode 0600, unless it already exists;
-- writes `~/.config/systemd/user/jass-panel.service`, reloads the user manager, enables the unit and starts it;
-- prints the proxy block, and does not change the proxy, the website or any server.
+The installer checks `tar`, `systemctl` and `loginctl`, Node.js 22.12 or newer, that the daemon is built, that the user manager is running,
+and that lingering is on. If lingering is off and the installer is in a terminal, it offers the command from step 4. It stops at the first
+failed check and prints the fix. When every check passes, it:
 
-Running it again changes nothing if nothing has changed. An existing `panel.env` is kept. If you pass a different `PANEL_PUBLIC_ORIGIN`, the
-installer says so and keeps the value in the file; edit the file to change it, then run `systemctl --user restart jass-panel`.
+- writes `~/.config/jass-panel/panel.env` (mode 0600) with your origin, the website at `http://127.0.0.1:3000`, port `29200` and base path `/panel`;
+- writes `~/.config/systemd/user/jass-panel.service`, reloads the user manager and enables the unit;
+- starts the panel, or restarts it if the unit changed;
+- prints the proxy block for step 7.
 
-### 7. Add the proxy block
+It does not change the proxy, the website or any game server. Running it again changes nothing that is already correct.
 
-The website's Caddyfile must do two things before its default handler: refuse `/api/panel` and `/api/panel/*`, and import `/etc/caddy/conf.d/*.caddy` inside its site block. Confirm both first:
+**An existing `panel.env` is kept.** The installer never changes the origin in a file that already exists. If the origin you pass differs
+from the file's, it prints a warning and keeps the old value. To use a different origin, edit `~/.config/jass-panel/panel.env` and run
+`systemctl --user restart jass-panel`. To start over, follow [Uninstall](#uninstall).
 
-```sh
-grep -n -E 'conf.d|api/panel' /etc/caddy/Caddyfile
-```
-
-You should see the import line, and a matcher for `/api/panel` and `/api/panel/*` answered with `respond 404`.
-
-Then write the block the installer printed. Its port and base path come from `panel.env`:
+**Check the origin.** The `PANEL_PUBLIC_ORIGIN` value in `panel.env` must be the address you will type into the browser, and it must match
+the website's `AUTH_URL`:
 
 ```sh
-sudo mkdir -p /etc/caddy/conf.d
-sudo tee /etc/caddy/conf.d/jass-panel.caddy >/dev/null <<'EOF'
-@panel path /panel /panel/*
-handle @panel {
-    reverse_proxy 127.0.0.1:29200
-}
-EOF
-sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
-sudo systemctl reload caddy
+grep PANEL_PUBLIC_ORIGIN ~/.config/jass-panel/panel.env
 ```
 
-Write the snippet before you reload Caddy: the `/panel` route exists only
-once the file does. Caddy takes one matcher per `handle`, which is why the paths sit in a named `path` matcher. If you changed `PANEL_PORT` or `PANEL_BASE_PATH`, use the block the installer printed, which has your values.
+If it is wrong, edit the file and run `systemctl --user restart jass-panel`.
+
+**Check the service.** The first command prints `active`; the second prints a line containing `panel listening on loopback`:
+
+```sh
+systemctl --user is-active jass-panel
+journalctl --user -u jass-panel --no-pager | grep 'panel listening on loopback'
+```
+
+### 7. Serve the panel through Caddy
+
+Caddy is already running from step 3. This step adds the panel's route to Caddy and reloads it. The route is served at the base path in
+`panel.env`, which is `/panel` by default.
+
+1. Write the block the installer printed into the snippet folder. The block below uses the defaults. If you changed `PANEL_PORT` or
+   `PANEL_BASE_PATH`, use the block the installer printed instead, since it has your values:
+
+   ```sh
+   sudo mkdir -p /etc/caddy/conf.d
+   sudo tee /etc/caddy/conf.d/jass-panel.caddy >/dev/null <<'EOF'
+   @panel path /panel /panel/*
+   handle @panel {
+       reverse_proxy 127.0.0.1:29200
+   }
+   EOF
+   ```
+
+   The closing `EOF` must be on a line of its own, with nothing before it. If the terminal shows a `>` prompt after you paste, that line
+   is missing. The quotes around `'EOF'` stop the shell from changing anything inside the block.
+
+2. Make sure Caddy is running. `systemctl is-active caddy` must print `active`. If it does not, go back to step 3 and start Caddy.
+
+3. Validate, and reload only if validation passed:
+
+   ```sh
+   sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile && sudo systemctl reload caddy
+   ```
+
+   Validation must print `Valid configuration`. The warning about the import matching no files should now be gone, because the snippet
+   exists. If the reload fails, the running configuration is unchanged, and the cause is in
+   `sudo journalctl -u caddy -n 50 --no-pager`.
+
+4. Run every check in step 8. Only those checks prove that the refusal and the panel route both work.
+
+The `/panel` route exists only once the file does. Caddy takes one matcher per `handle`, so the paths sit in a named `path` matcher:
+`handle /panel /panel/*` is a parse error.
 
 ### 8. Check it
 
-Replace `example.net` with your public host in the `curl` commands below.
+Run the checks in order. Each one names the result to expect. Replace `example.net` with your public host. If the name does not resolve to
+this machine yet, add `--resolve example.net:443:127.0.0.1` to each `curl`. Add `-k` only for a test certificate, because it skips
+certificate checks.
 
-- `systemctl --user status jass-panel` shows `active (running)`, and `systemctl --user is-enabled jass-panel` prints `enabled`.
-- `journalctl --user -u jass-panel -n 50` shows `panel listening on loopback` and no errors.
-- `curl -I https://example.net/panel/` includes `Content-Security-Policy`, `X-Frame-Options: DENY`, `Referrer-Policy`,
-  `X-Content-Type-Options` and `X-Robots-Tag: noindex`.
-- `curl -i https://example.net/api/panel/session` answers `404`.
-- Signed out, `GET /panel/api/v1/me` answers `401` with `unauthenticated`. With the website down it answers `503` with `unavailable`, and
-  neither answer ever redirects.
+1. The service runs. Each command prints the word shown:
+
+   ```sh
+   systemctl --user is-active jass-panel     # active
+   systemctl --user is-enabled jass-panel    # enabled
+   ```
+
+2. The daemon answers on loopback, without going through Caddy. Signed out, the identity check answers `401`:
+
+   ```sh
+   curl -s -i http://127.0.0.1:29200/panel/api/v1/me
+   ```
+
+   The body contains `"code":"unauthenticated"`.
+
+3. The panel's page through Caddy. Use `-i`, which sends a GET request. The panel answers a HEAD request (`curl -I`) with `404` even when
+   the headers are there, so `-I` is the wrong check:
+
+   ```sh
+   curl -s -i https://example.net/panel/
+   ```
+
+   It answers `200`, and the response includes `Content-Security-Policy`, `X-Frame-Options: DENY`, `Referrer-Policy`,
+   `X-Content-Type-Options` and `X-Robots-Tag: noindex`.
+
+4. The website's API is refused through Caddy. This check proves that the refusal works:
+
+   ```sh
+   curl -s -i https://example.net/api/panel/session
+   curl -s -i https://example.net/api/panel
+   ```
+
+   Both must answer `404`. Any other answer means the refusal is not in effect. Fix the website's Caddyfile as step 3 describes, then
+   validate and reload Caddy as step 7 does.
+
+5. Signed out, the panel refuses you through Caddy:
+
+   ```sh
+   curl -s -i https://example.net/panel/api/v1/me
+   ```
+
+   It answers `401` with `unauthenticated`. With the website down, the same request answers `503` with `unavailable`. Neither answer
+   redirects.
+
+6. Signed in, the panel works. Follow step 9: the Servers page opens, Health lists its checks, and Access lists the website's OWNER and
+   ADMIN accounts. If Access says the accounts could not be listed, the panel could not get them from the website. Check `SITE_INTERNAL_URL`
+   in `panel.env`, and that the website answers `/api/panel/accounts` on loopback.
 
 ### 9. Sign in
 
@@ -428,29 +617,63 @@ Before a migration the daemon keeps a copy of the database (the newest five), an
 
 ### Uninstall
 
-```sh
-systemctl --user disable --now jass-panel
-rm ~/.config/systemd/user/jass-panel.service
-rm -r ~/.config/jass-panel
-sudo rm /etc/caddy/conf.d/jass-panel.caddy && sudo systemctl reload caddy
-```
+This removes the panel from the account. It leaves the website, the website's Caddyfile (including its import line), and every server
+folder.
 
-Server units are left alone unless their servers were removed from the panel first. The data directory is kept until you remove it.
+1. Remove each game server from the panel first. Stop it, then remove it under Servers. Removing a server deletes its two unit files and its
+   record in the panel. The server's folder stays.
+
+2. Stop the panel, and remove its unit and its configuration:
+
+   ```sh
+   systemctl --user disable --now jass-panel
+   rm ~/.config/systemd/user/jass-panel.service
+   systemctl --user daemon-reload
+   rm -r ~/.config/jass-panel
+   ```
+
+3. Remove the panel's route from Caddy, and reload Caddy if it is running. Caddy warns that the import matches no files, which is expected:
+
+   ```sh
+   sudo rm /etc/caddy/conf.d/jass-panel.caddy
+   systemctl is-active caddy && sudo systemctl reload caddy
+   ```
+
+4. Optional: remove the panel's data. This deletes the database, the backups, the file history and the event logs, so do it only when you
+   want the next install to start empty. The default location is `~/.local/share/jass-panel`. If you set `PANEL_DATA_DIR`, remove that
+   folder instead.
+
+   ```sh
+   rm -r ~/.local/share/jass-panel
+   ```
+
+To install again, check that steps 3 to 5 still hold, then run the installer from step 6. Because step 2 removed `panel.env`, the installer
+writes a new one with the origin you pass.
 
 ## Troubleshooting
 
 | What you see | What it means and what to do |
 |---|---|
+| Installer: `<tool> is not installed` | Install the named tool (`tar`, `systemctl` or `loginctl`), then run the installer again. |
 | Installer: `the systemd user manager is not running for <account>` | Log in on the machine, or run `sudo loginctl enable-linger <account>` and log in again, then run the installer again. |
-| Installer: `lingering is off` | Run `sudo loginctl enable-linger <account>`, then run the installer again. |
+| Installer: `lingering is off` | Run `sudo loginctl enable-linger <account>`, then run the installer again. Run the installer in a terminal to be offered the command. |
 | Installer: `Node.js … or newer is needed` | Install Node.js 22.12 or newer, so that `node` on `PATH` is that version. |
 | Installer: `the daemon is not built` | Run `npm ci && npm run build` in the checkout. |
+| Installer: `give the website's public origin` | Run the installer again with `PANEL_PUBLIC_ORIGIN=https://…` in front of the command. |
+| Installer: `… has no PANEL_PUBLIC_ORIGIN line` | Add `PANEL_PUBLIC_ORIGIN=<the website's public origin>` to `~/.config/jass-panel/panel.env`, then run the installer again. |
+| Installer: `warning: … already sets PANEL_PUBLIC_ORIGIN=…` | `panel.env` was kept, so the new origin was not written. Edit the file to the origin you want, then run `systemctl --user restart jass-panel`. |
 | Daemon exits: `PANEL_PUBLIC_ORIGIN is required` | Set it in `~/.config/jass-panel/panel.env`, then restart. |
+| Browser shows `403` with `wrong_host` | The address in the browser is not `PANEL_PUBLIC_ORIGIN`. Make the origin the address you browse to, then restart the panel. |
 | `Sign-in cannot be checked right now` | The website did not confirm who you are. Check that it answers on `127.0.0.1:3000`, that its `/api/panel/session` route is deployed, and that its `AUTH_URL` is the public HTTPS origin. |
 | `No access to anything yet` | The account is an ADMIN with no grants. An owner grants it something on Access. |
 | Access says the accounts could not be listed | The website could not be asked for its accounts. Check that it is up and that `/api/panel/accounts` answers `401` without a cookie. The list then shows only people the panel has seen. |
 | Access says only owners and panel operators can list the website's accounts | Expected for an ADMIN with `access.manage`: the screen shows the people this panel has seen. |
-| The panel URL shows the website's page, or no panel headers | The `conf.d` import is missing from the Caddyfile, or the snippet was not written or reloaded. See Install, step 7. |
+| `sudo: caddy: command not found` | Run the same command with the full path, for example `sudo "$(command -v caddy)" validate --config /etc/caddy/Caddyfile --adapter caddyfile`. |
+| `caddy.service is not active, cannot reload.` | Caddy is stopped, so there is nothing to reload. Install, step 3 starts it. Find the cause with `sudo journalctl -u caddy -n 50 --no-pager`. |
+| Caddy will not start, and its journal shows a bind error | Another program holds port 80 or 443. `sudo ss -ltnp \| grep -E ':(80\|443) '` shows which one. Stop it, then start Caddy again. |
+| `curl -I https://…/panel/` answers `404` | `-I` sends a HEAD request, which the panel answers with `404`. Use `curl -i`, which answers `200`. |
+| `curl -i https://…/api/panel/session` answers anything but `404` | The refusal is not in effect. Make it a `handle @panel_api { respond 404 }` block, as Install, step 3 shows, then validate and reload Caddy. |
+| The panel URL shows the website's page, or no panel headers | The import is missing from the website's Caddyfile, the snippet was not written, or Caddy was not reloaded after the snippet was written. See Install, step 7. |
 | `The server stopped while it was starting. The journal has the reason.` | The unit stopped during start. Read `journalctl --user -u jass-mc-<id>.service`. A world another process still holds is a common cause: stop the old process first. |
 | `The server did not report that it had finished loading within five minutes` | The server was left running. Check its log; it may still be loading, or it may not print a `Done` line. |
 | `The panel could not confirm that the server started.` | Do not start it again. Read its state on the page, and check its journal, until the state is clear. |
